@@ -4,25 +4,20 @@ import "./styles.css";
 
 export default function App() {
   const [allTasks, setAllTasks] = useState({ todo, inProgress, completed });
-
+  const toggleHandler = (task, updatedTasks, c1, c2) => {
+    return {
+      ...allTasks,
+      [c1]: updatedTasks,
+      [c2]: [...allTasks[c2], task]
+    };
+  };
   const taskClickHandler = (task, category) => {
-    console.log(task, category);
     let updatedTask = allTasks[category].filter((t) => t.id !== task.id);
     if (category === "todo") {
-      updatedTask = {
-        ...allTasks,
-        [category]: updatedTask,
-        inProgress: [...allTasks["inProgress"], task]
-      };
+      setAllTasks(toggleHandler(task, updatedTask, "todo", "inProgress"));
+    } else {
+      setAllTasks(toggleHandler(task, updatedTask, "inProgress", "completed"));
     }
-    if (category === "inProgress") {
-      updatedTask = {
-        ...allTasks,
-        [category]: updatedTask,
-        completed: [...allTasks["completed"], task]
-      };
-    }
-    setAllTasks(updatedTask);
   };
   return (
     <div className="App">
